@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Village - Adjusted Prices</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #009879;
+        }
+        .conditions-panel {
+            background: #eafaf1;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .conditions-panel h2 {
+            margin-top: 0;
+            color: #009879;
+        }
+        .conditions-panel p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 1em;
+        }
+        th {
+            background-color: #009879;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .price-increase {
+            color: red;
+            font-weight: bold;
+        }
+        .price-decrease {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            padding: 15px;
+            background: #ffe6e6;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 10px;
+            }
+            .conditions-panel p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Village Menu - Adjusted Prices</h1>
+
+    <div class="description">
+        <h2>About Dynamic Pricing</h2>
+        <p>Dynamic pricing is a strategy where prices are adjusted in real-time based on various factors such as demand, competition, and external conditions. In our user-case restaurant, "Village the Soul of India," we adjust menu prices based on current weather conditions, busyness, and local competition. This ensures that our prices remain competitive while maximizing revenue during peak times.</p>
+    </div>
+
+    <div class="btn-container">
+        <!-- Button to trigger the display of adjusted prices -->
+        <form method="GET" action="{% url 'adjusted_price' %}" style="display: inline-block;">
+            <input type="hidden" name="show_adjusted_prices" value="true">
+            <button type="submit">Show Adjusted Menu Prices</button>
+        </form>
+    </div>
+    <!-- Error Message -->
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <!-- Weather and Busyness Panel -->
+    {% if current_temperature %}
+        <div class="conditions-panel">
+            <h2>Current Conditions</h2>
+            <p><strong>Temperature:</strong> {{ current_temperature }}°F</p>
+            <p><strong>Weather:</strong> {{ weather_description }}</p>
+            <p><strong>Precipitation:</strong> {{ current_precipitation }} mm</p>
+            <p><strong>Restaurant Busyness:</strong> {{ current_busyness }}%</p>
+        </div>
+        <p><em>Note: Adjusted factor are based on the current conditions and local competition. The conditions are strictly set to meet all 3 required conditions to face an increase in price or else it is set to local lowest</em></p>
+        <!-- Adjusted Prices Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Menu Item</th>
+                    <th>Original Price</th>
+                    <th>Lowest Local Price</th>
+                    <th>Adjusted Price</th>
+                    <th>Adjustment Factor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in adjusted_prices %}
+                    <tr>
+                        <td>{{ item.item }}</td>
+                        <td>${{ item.base_price|floatformat:2 }}</td>
+                        <td>${{ item.lowest_competitor_price|floatformat:2 }} <br>({{ item.lowest_competitor }})</td>
+                        <td class="{% if item.adjusted_price > item.base_price %}price-increase{% else %}price-decrease{% endif %}">
+                            ${{ item.adjusted_price|floatformat:2 }}
+                        </td>
+                        <td>{{ item.adjustment_factor|floatformat:2 }}x</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    
+    {% endif %}
+</body>
+</html>

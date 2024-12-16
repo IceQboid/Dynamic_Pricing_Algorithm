@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Village Details - Weather & Busy Times</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #009879;
+        }
+        p {
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .btn-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #009879;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #007d63;
+        }
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            background-color: #fff;
+            text-align: center;
+        }
+        thead tr {
+            background-color: #009879;
+            color: #ffffff;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #dddddd;
+        }
+        tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+        }
+        .info-box {
+            background: #eafaf1;
+            border-left: 5px solid #009879;
+            padding: 15px 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Village Details</h1>
+
+<div class="btn-container">
+    <!-- Button to trigger the display of weather -->
+    <form method="GET" action="{% url 'get_weather' %}" style="display: inline-block;">
+        <input type="hidden" name="show_weather" value="true">
+        <button type="submit">Show Weather</button>
+    </form>
+
+    <!-- Button to trigger the display of busy times -->
+    <form method="GET" action="{% url 'get_busy_hours' %}" style="display: inline-block;">
+        <input type="hidden" name="show_busy_hours" value="true">
+        <button type="submit">Show Busy Times</button>
+    </form>
+</div>
+
+<!-- Display the weather information -->
+{% if weather %}
+    <div class="info-box">
+        <h2>Weather Information for {{ city }}</h2>
+        <p><strong>Condition:</strong> {{ weather }}</p>
+        <p><strong>Current Temperature:</strong> {{ temperature }}°F</p>
+        <p><strong>Rain:</strong> {{ rain }}</p>
+    </div>
+{% else %}
+    <p>No weather data available. Press the button to search</p>
+{% endif %}
+
+<!-- Display the busy times -->
+{% if busy_times %}
+    <h2>Busy Times & Popularity</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Hour</th>
+                <th>Popularity (%)</th>
+                <th>Wait Time (Minutes)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for day_info in busy_times %}
+                {% for time in day_info.times %}
+                    <tr>
+                        <td>{{ day_info.day }}</td>
+                        <td>{{ time.hour }}:00</td>
+                        <td>{{ time.popularity }}%</td>
+                        <td>{{ time.wait_time }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No busy times data available. Press the button to search</p>
+{% endif %}
+
+<!-- Display error messages if any -->
+{% if error_weather %}
+    <p class="error">{{ error_weather }}</p>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Village Details</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #009879;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #007B5E;
+            padding: 10px 0;
+        }
+        nav a {
+            text-decoration: none;
+            color: white;
+            margin: 0 15px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #005F47;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-evenly;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #009879;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #007B5E;
+            transform: scale(1.05);
+        }
+        h2 {
+            color: #009879;
+            border-bottom: 2px solid #009879;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        thead {
+            background-color: #009879;
+            color: white;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f3f3f3;
+        }
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #009879;
+            color: white;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Village the Soul of India</h1>
+</header>
+
+
+
+<div class="container">
+
+    <!-- Button Section -->
+    <div class="button-container">
+        <form method="GET" action="{% url 'village_details' %}">
+            <input type="hidden" name="show_details" value="true">
+            <button type="submit">Show Village Details</button>
+        </form>
+        <form method="GET" action="{% url 'get_top5_restaurants' %}">
+            <input type="hidden" name="show_top5" value="true">
+            <button type="submit">Detect Top 5 Similar Restaurants</button>
+        </form>
+        <form method="GET" action="{% url 'compare_prices' %}">
+            <input type="hidden" name="compare_prices" value="true">
+            <button type="submit">Compare Prices</button>
+        </form>
+    </div>
+
+    <!-- Village Details -->
+    {% if name %}
+        <section id="details">
+            <h2>Village Details</h2>
+            <p><strong>Name:</strong> {{ name }}</p>
+            <p><strong>Address:</strong> {{ address }}</p>
+            <p><strong>Phone:</strong> {{ phone }}</p>
+            <p><strong>Rating:</strong> {{ rating }}</p>
+
+            <h3>Opening Hours:</h3>
+            <ul>
+                {% for hour in hours %}
+                    <li>{{ hour }}</li>
+                {% endfor %}
+            </ul>
+
+            <h3>Menu:</h3>
+            {% if menu %}
+                {% for section, items in menu.items %}
+                    <h4>{{ section }}</h4>
+                    <ul>
+                        {% for item in items %}
+                            <li>{{ item.item }} - {{ item.price }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            {% else %}
+                <p>No menu available.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+
+    <!-- Top 5 Restaurants -->
+    {% if top5 %}
+        <section id="top5">
+            <h2>Top 5 Similar Restaurants Nearby</h2>
+            <ul>
+                {% for restaurant in top5 %}
+                    <li>{{ restaurant.name }} - Rating: {{ restaurant.rating }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    <!-- Lowest Prices Section -->
+    {% if lowest_prices %}
+        <section id="compare">
+            <h2>Cheapest Local Menu Items</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Cheapest Restaurant</th>
+                        <th>Lowest Price</th>
+                        <th>Other Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item, details in lowest_prices.items %}
+                        <tr>
+                            <td>{{ item }}</td>
+                            <td>{{ details.cheapest_restaurant }}</td>
+                            <td>{{ details.lowest_price }}</td>
+                            <td>
+                                {% for option in details.matching_restaurants %}
+                                    {{ option.restaurant }}: ${{ option.price }}<br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    {% endif %}
+</div>
+
+<footer>
+    <p>Django-based ML project</p>
+</footer>
+
+</body>
+</html>
