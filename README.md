@@ -50,17 +50,21 @@ This project implements a dynamic pricing algorithm for a restaurant, "Village t
 ## Usage
 1. **Fetch and Display Village Details**:
     - Navigate to `pricing/village-details/` to see the details of "Village the Soul of India."
-    -Details include 
+      
+    -Details include
+   
     [1]Name,Address,Phone,Rating,Opening Hours and Menu.
+   
     [2]Fetching nearby restaurant serving similar menu.
+   
     [3]Comparing similar menu items.
 
 
-2. **View Busy Times and Weather of Restaurant**:
+3. **View Busy Times and Weather of Restaurant**:
     - Navigate to `pricing/get-busy-times/`,  to see the busy hours and the momentary popularity of the restaurant.
     - Navigate to `pricing/get-current-weather/`, to see current weather in the location of the restaurant.
 
-3. **View Adjusted Prices**:
+4. **View Adjusted Prices**:
     - Navigate to `pricing/get_adjusted_prices/` to see the dynamically adjusted prices based on current weather and busyness conditions.
 
 ## API References
