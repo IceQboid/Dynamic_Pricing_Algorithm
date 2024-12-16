@@ -75,8 +75,7 @@ This project implements a dynamic pricing algorithm for a restaurant, "Village t
 ## Problem Tackled
 - **Google Places API Popular Timing**: The Google Maps API did not provide popular timing data directly. To resolve this, the [populartimes] library was used to fetch and process the busy times data.
 - **Yelp API Time Format**: The Yelp API provided time data in a 24-hour format. This was converted to a 12-hour format for better readability using a helper function.
-- **Dataset Collection**:
-- The data is synthesized with recent weather reports to ensure accurate and up-to-date pricing adjustments.
+- **Dataset Collection**: The data is synthesized with recent weather reports to ensure accurate and up-to-date pricing adjustments.
 
 ## Machine Learning Model
 - **Model Used**: Decision Tree Regressor
