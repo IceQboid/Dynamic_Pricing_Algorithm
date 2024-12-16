@@ -53,11 +53,11 @@ This project implements a dynamic pricing algorithm for a restaurant, "Village t
       
     -Details include
    
-    [1]Name,Address,Phone,Rating,Opening Hours and Menu.
+    1.1.Name,Address,Phone,Rating,Opening Hours and Menu.
    
-    [2]Fetching nearby restaurant serving similar menu.
+    1.2.Fetching nearby restaurant serving similar menu.
    
-    [3]Comparing similar menu items.
+    1.3.Comparing similar menu items.
 
 
 3. **View Busy Times and Weather of Restaurant**:
