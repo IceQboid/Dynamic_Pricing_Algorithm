@@ -1,7 +1,7 @@
 # Pricing Algorithm Project
 
 ## Overview
-This project implements a dynamic pricing algorithm for a restaurant, "Village the Soul of India," based on various factors such as local competition, weather conditions, and busyness. The project uses data from Yelp, Google Maps, and OpenWeather APIs to adjust menu prices dynamically.
+This project implements a dynamic pricing algorithm for restaurants, example used here is "Village the Soul of India," based on various factors such as local competition, weather conditions, and busyness. The project uses data from Yelp, Google Maps, and OpenWeather APIs to adjust menu prices dynamically.
 
 ## Features
 1. **Fetch Restaurant Details**: Get name, address, open times, menu items, and prices for Village from Yelp API.
